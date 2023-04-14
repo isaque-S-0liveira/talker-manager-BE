@@ -1,5 +1,6 @@
 const express = require('express');
-const fs = require('fs').promises;
+const { readfile } = require('./utils/fsUtils');
+const { haveRecords } = require('./middlewares/validations');
 
 const app = express();
 app.use(express.json());
@@ -16,19 +17,12 @@ app.listen(PORT, () => {
   console.log('Online');
 });
 
-const readifile = async () => {
-  const response = await fs.readFile('src/talker.json', 'utf-8');
-  return JSON.parse(response);
-};
-
-app.get('/talker', async (__req, res) => {
-  const persons = await readifile();
-  if (persons.length === 0) {
-    return res.status(200).send([]);
-  } 
+app.get('/talker', haveRecords, async (__req, res) => {
+  const persons = await readfile();
   return res.status(200).send(persons);
 });
 
 // app.get('/talker/:id', async(req, res) => {
-
+ 
 // });
+

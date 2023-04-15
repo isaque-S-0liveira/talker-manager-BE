@@ -1,6 +1,10 @@
 const express = require('express');
 const { readfile, readfileID } = require('./utils/fsUtils');
-const { haveRecords, validationID } = require('./middlewares/validations');
+const {
+  haveRecords,
+  validationID,
+  validationEmail,
+  validatePassword } = require('./middlewares/validations');
 const generateToken = require('./utils/generateToken');
 
 const app = express();
@@ -29,12 +33,17 @@ app.get('/talker/:id', validationID, async (req, res) => {
   return res.status(200).send(personID);
 });
 
-app.post('/login', async (__req, res) => {
+app.post('/login',
+validationEmail,
+validatePassword,
+async (__req, res) => {
   // const newPerson = req.body;
   const token = generateToken();
+  // const { email, password } = req.body;
   // const addNewPerson = {
   //   ...newPerson
   // }
+  // console.log(email, password);
   // await writeNewPerson(addNewPerson);
   return res.status(200).json({ token });
 });

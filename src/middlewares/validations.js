@@ -15,8 +15,9 @@ const validationID = async (req, res, next) => {
   if (!verID) {
     return res.status(404).json(
       {
-      message: "Pessoa palestrante não encontrada"
-    })
+      message: 'Pessoa palestrante não encontrada',
+    },
+   );
   }
   next();
 };

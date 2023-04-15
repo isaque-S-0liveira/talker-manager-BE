@@ -1,6 +1,6 @@
 const express = require('express');
-const { readfile } = require('./utils/fsUtils');
-const { haveRecords } = require('./middlewares/validations');
+const { readfile, readfileID } = require('./utils/fsUtils');
+const { haveRecords, validationID } = require('./middlewares/validations');
 
 const app = express();
 app.use(express.json());
@@ -22,7 +22,9 @@ app.get('/talker', haveRecords, async (__req, res) => {
   return res.status(200).send(persons);
 });
 
-// app.get('/talker/:id', async(req, res) => {
- 
-// });
+app.get('/talker/:id', validationID, async(req, res) => {
+  const { id } = req.params;
+  const personID = await readfileID(id);
+  return res.status(200).send(personID);
+});
 

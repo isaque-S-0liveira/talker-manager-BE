@@ -10,6 +10,18 @@ const readfile = async () => {
     }
   };
 
+  const readfileID = async (id) => {
+    try {
+        //const ID = Object.values(id);
+        const response = await fs.readFile(path.resolve(__dirname, '../talker.json'));
+        const responseID = JSON.parse(response).find((el) => el.id === Number(id));
+        return responseID
+    } catch (error) {
+      console.log(`erro na leitura do arquivo: ${error}`);
+    }
+  };
+
   module.exports = {
     readfile,
+    readfileID,
 }; 

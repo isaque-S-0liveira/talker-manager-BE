@@ -1,5 +1,9 @@
 const express = require('express');
-const { readfile, readfileID, writeNewPerson, editTalker } = require('./utils/fsUtils');
+const { readfile,
+  readfileID,
+  writeNewPerson,
+  editTalker,
+  deleteTalker } = require('./utils/fsUtils');
 const {
   haveRecords,
   validationID,
@@ -50,35 +54,41 @@ app.post('/login',
   });
 
 app.post('/talker',
-validateAuthorization,
-validateTalk,
-validateWatchedAt,
-validateRate,
-validateAge,
-validateName, async (req, res) => {
-  const { name, age, talk } = req.body;
-  const oldProfile = await readfile();
-  const addNewPerson = {
-    name,
-    age,
-    talk,
-  };
-  await writeNewPerson(addNewPerson);
-  res.status(201).json({ id: (oldProfile.length) + 1, name, age, talk });
-});
+  validateAuthorization,
+  validateTalk,
+  validateWatchedAt,
+  validateRate,
+  validateAge,
+  validateName, async (req, res) => {
+    const { name, age, talk } = req.body;
+    const oldProfile = await readfile();
+    const addNewPerson = {
+      name,
+      age,
+      talk,
+    };
+    await writeNewPerson(addNewPerson);
+    res.status(201).json({ id: (oldProfile.length) + 1, name, age, talk });
+  });
 
 app.put('/talker/:id',
-validateAuthorization,
-validateName,
-validateAge,
-validateTalk,
-validateWatchedAt,
-validateRate,
-validationID,
-async (req, res) => {
-  const { id } = req.params;
-  const person = req.body;
-  const updatePerson = await editTalker(Number(id), person);
+  validateAuthorization,
+  validateName,
+  validateAge,
+  validateTalk,
+  validateWatchedAt,
+  validateRate,
+  validationID,
+  async (req, res) => {
+    const { id } = req.params;
+    const person = req.body;
+    const updatePerson = await editTalker(Number(id), person);
 
-   res.status(200).send(updatePerson);
+    res.status(200).send(updatePerson);
+  });
+
+app.delete('/talker/:id', validateAuthorization, validationID, async (req, res) => {
+  const { id } = req.params;
+  await deleteTalker(Number(id));
+  res.status(204).end();
 });

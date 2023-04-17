@@ -54,9 +54,22 @@ const editTalker = async (id, body) => {
   // })
 };
 
+const deleteTalker = async (id) => {
+  const allPersons = await readfile();
+  const filteredPersons = allPersons.filter((el) => el.id !== id);
+  const updatePersons = JSON.stringify(filteredPersons);
+  try {
+    await fs.writeFile(path.resolve(__dirname, TALKER_DATA_PATH), updatePersons);
+    console.log(`Deletou o palestrante com o id: ${id}`);
+  } catch (error) {
+    console.log(`Erro na ecrita do arquivo: ${error}`);
+  }
+};
+
 module.exports = {
   readfile,
   readfileID,
   writeNewPerson,
   editTalker,
+  deleteTalker,
 }; 

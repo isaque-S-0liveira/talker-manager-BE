@@ -1,10 +1,16 @@
 const express = require('express');
-const { readfile, readfileID } = require('./utils/fsUtils');
+const { readfile, readfileID, writeNewPerson } = require('./utils/fsUtils');
 const {
   haveRecords,
   validationID,
   validationEmail,
-  validatePassword } = require('./middlewares/validations');
+  validatePassword,
+  validateAuthorization,
+  validateName,
+  validateAge,
+  validateTalk,
+  validateWatchedAt,
+  validateRate } = require('./middlewares/validations');
 const generateToken = require('./utils/generateToken');
 
 const app = express();
@@ -34,16 +40,33 @@ app.get('/talker/:id', validationID, async (req, res) => {
 });
 
 app.post('/login',
-validationEmail,
-validatePassword,
-async (__req, res) => {
-  // const newPerson = req.body;
-  const token = generateToken();
-  // const { email, password } = req.body;
-  // const addNewPerson = {
-  //   ...newPerson
-  // }
-  // console.log(email, password);
-  // await writeNewPerson(addNewPerson);
-  return res.status(200).json({ token });
+  validationEmail,
+  validatePassword,
+  async (__req, res) => {
+    // const newPerson = req.body;
+    const token = generateToken();
+    // const { email, password } = req.body;
+    // const addNewPerson = {
+    //   ...newPerson
+    // }
+    // console.log(email, password);
+    // await writeNewPerson(addNewPerson);
+    res.status(200).json({ token });
+  });
+app.post('/talker',
+validateAuthorization,
+validateTalk,
+validateWatchedAt,
+validateRate,
+validateAge,
+validateName, async (req, res) => {
+  const { name, age, talk } = req.body;
+  const oldProfile = await readfile();
+  const addNewPerson = {
+    name,
+    age,
+    talk,
+  };
+  await writeNewPerson(addNewPerson);
+  res.status(201).json({ id: (oldProfile.length) + 1, name, age, talk });
 });

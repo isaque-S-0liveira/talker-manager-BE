@@ -37,8 +37,26 @@ const writeNewPerson = async (person) => {
   }
 };
 
+const editTalker = async (id, body) => {
+  const allPersons = await readfile();
+  const editPerson = { id, ...body };
+  const updatePersons = [...allPersons, editPerson];
+  const updatePersonsData = JSON.stringify(updatePersons);
+  try {
+    await fs.writeFile(path.resolve(__dirname, TALKER_DATA_PATH), updatePersonsData);
+    console.log(`Atualizou palestrante com o id: ${id}`);
+    return editPerson;
+  } catch (error) {
+    console.log(`Erro na ecrita do arquivo: ${error}`);
+  }
+  // const editPersons = allPersons.reduce((personsList, currentPerson) => {
+  //   return 
+  // })
+};
+
 module.exports = {
   readfile,
   readfileID,
   writeNewPerson,
+  editTalker,
 }; 

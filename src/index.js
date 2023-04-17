@@ -1,5 +1,5 @@
 const express = require('express');
-const { readfile, readfileID, writeNewPerson } = require('./utils/fsUtils');
+const { readfile, readfileID, writeNewPerson, editTalker } = require('./utils/fsUtils');
 const {
   haveRecords,
   validationID,
@@ -12,6 +12,8 @@ const {
   validateWatchedAt,
   validateRate } = require('./middlewares/validations');
 const generateToken = require('./utils/generateToken');
+
+generateToken();
 
 const app = express();
 app.use(express.json());
@@ -43,16 +45,10 @@ app.post('/login',
   validationEmail,
   validatePassword,
   async (__req, res) => {
-    // const newPerson = req.body;
     const token = generateToken();
-    // const { email, password } = req.body;
-    // const addNewPerson = {
-    //   ...newPerson
-    // }
-    // console.log(email, password);
-    // await writeNewPerson(addNewPerson);
     res.status(200).json({ token });
   });
+
 app.post('/talker',
 validateAuthorization,
 validateTalk,
@@ -69,4 +65,20 @@ validateName, async (req, res) => {
   };
   await writeNewPerson(addNewPerson);
   res.status(201).json({ id: (oldProfile.length) + 1, name, age, talk });
+});
+
+app.put('/talker/:id',
+validateAuthorization,
+validateName,
+validateAge,
+validateTalk,
+validateWatchedAt,
+validateRate,
+validationID,
+async (req, res) => {
+  const { id } = req.params;
+  const person = req.body;
+  const updatePerson = await editTalker(Number(id), person);
+
+   res.status(200).send(updatePerson);
 });

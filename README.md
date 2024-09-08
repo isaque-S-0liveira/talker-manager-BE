@@ -38,7 +38,6 @@ Este projeto é uma excelente oportunidade para reforçar o uso de **APIs REST**
 
 - [Node.js](https://nodejs.org/) - Plataforma para construir a API backend em JavaScript.
 - [Express](https://expressjs.com/) - Framework para Node.js, utilizado para gerenciar rotas e middlewares.
-- [MySQL](https://www.mysql.com/) - Banco de dados relacional utilizado para armazenar as informações de palestrantes.
 - [Docker](https://www.docker.com/) - Ferramenta de conteinerização para rodar o ambiente de desenvolvimento de forma isolada.
 - [fs (File System)](https://nodejs.org/api/fs.html) - Módulo nativo do Node.js utilizado para ler e escrever em arquivos JSON.
 
